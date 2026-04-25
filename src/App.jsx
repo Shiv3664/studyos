@@ -392,7 +392,8 @@ function Dashboard({s1,s2,days,projects,setTab}){
   const totalM=s1.total+s2.total, doneM=s1.done+s2.done, remainM=totalM-doneM;
   const activeDays=days.filter(d=>!d.isOff).length;
   const offDays=days.filter(d=>d.isOff).length;
-  const hpdNeeded=activeDays>0?(remainM/60/activeDays).toFixed(1):"—";
+  const activeRemaining=days.filter(d=>!d.isOff&&d.day>=currentDay).length;
+  const hpdNeeded=activeRemaining>0?(remainM/60/activeRemaining).toFixed(1):"—";
   const vLog=days.reduce((s,d)=>s+(d.log?.video||0),0);
   const pLog=days.reduce((s,d)=>s+(d.log?.practical||0),0);
   const oLog=days.reduce((s,d)=>s+(d.log?.other||0),0);
@@ -433,7 +434,7 @@ function Dashboard({s1,s2,days,projects,setTab}){
         <div style={{width:1,background:T.border,alignSelf:"stretch",minHeight:40}}/>
         <div style={{flex:1,minWidth:180}}>
           <div style={{fontSize:11,color:T.sub,marginBottom:4}}>
-            Day {currentDay}/35 · Ends <b>{fmtDate(dayToCalDate(35))}</b> · Need <b style={{color:parseFloat(hpdNeeded)>5?T.red:T.teal}}>{hpdNeeded}h/day</b>
+            Day {currentDay}/35 · Ends <b>{fmtDate(dayToCalDate(35))}</b> · Need <b style={{color:parseFloat(hpdNeeded)>5?T.red:T.teal}}>{hpdNeeded}h/day</b> from today
           </div>
           <Bar value={pct(currentDay,35)} color={T.blue} h={6}/>
           <div style={{display:"flex",justifyContent:"space-between",fontSize:9,color:T.faint,marginTop:2}}>
